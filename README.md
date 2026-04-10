@@ -195,7 +195,27 @@ Before proceeding to parameter scans, verify:
 - **Python 3**: For running the job list generator and cross-section extraction script
 - **Bash**: For running the scan script
 
-### 2. Configure Parameters in `make_joblist.py`
+### 2. Create the Runtime Environment (Conda)
+
+Use the compact, portable environment file as the default:
+
+```bash
+conda env create -f conda-env-mg5-history.yml
+conda activate mg5
+```
+
+Notes:
+
+- `conda-env-mg5-history.yml` is the recommended file for new setups (minimal dependency list, easier to solve across machines).
+- `conda-env-mg5.yml` is a full exported lock-style environment from one machine and can be used if you want to reproduce that specific stack exactly.
+
+If the `mg5` environment already exists and you only need activation:
+
+```bash
+conda activate mg5
+```
+
+### 3. Configure Parameters in `make_joblist.py`
 
 `make_joblist.py` now has a user-editable block at the top:
 
@@ -236,7 +256,7 @@ Core modes kept in `make_joblist.py`:
 - `--preset`: built-in grids (`type1case1scan1`, `tan0p01to50`, `legacy_default`)
 - `--repeat N`: repeat each generated point `N` times
 
-### 3. Generate the Job List
+### 4. Generate the Job List
 
 Default mode (use top config):
 
@@ -252,7 +272,7 @@ python3 make_joblist.py --from-results bbdm_2HDMa_type1_case1_scan1 -o joblist.t
 python3 make_joblist.py --repeat 5 -o joblist.txt
 ```
 
-### 4. Configure Submission Files
+### 5. Configure Submission Files
 
 Minimal checks before submit:
 
@@ -263,7 +283,7 @@ Minimal checks before submit:
 - Resource settings in `subMadscan.sub` are appropriate:
   - `request_memory`, `request_cpus`, `+JobFlavour`
 
-### 5. Submit to HTCondor
+### 6. Submit to HTCondor
 
 Recommended submit method:
 
@@ -277,7 +297,7 @@ This helper script automatically:
 - Creates log/result folders under `OUTROOT`
 - Passes `PROCESS_TAR` and `OUTROOT` to `condor_submit`
 
-### 6. Monitor Jobs
+### 7. Monitor Jobs
 
 ```bash
 condor_q
@@ -289,7 +309,7 @@ Logs are written to:
 - `OUTROOT/logs/error/`
 - `OUTROOT/logs/log/`
 
-### 7. Extract Cross Sections
+### 8. Extract Cross Sections
 
 After jobs finish:
 
@@ -301,7 +321,7 @@ Output:
 
 - `OUTROOT/cross_section_table.txt`
 
-### 8. Plotting Workflow
+### 9. Plotting Workflow
 
 All plotting scripts below read existing run outputs under `OUTROOT/results/`.
 
@@ -332,7 +352,7 @@ python3 comparison_crosssection.py bbdm_2HDMa_type1_case1_scan bbdm_2HDMa_type2_
 python3 comparison_met.py case1_scan --sin 0.9 --tan 3 --mA 600 --ma 300 --mchi 1 --cosbma 0 --deltam 0
 ```
 
-### 9. Minimal End-to-End Example
+### 10. Minimal End-to-End Example
 
 ```bash
 python3 make_joblist.py -o joblist.txt

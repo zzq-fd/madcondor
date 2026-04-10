@@ -1,0 +1,13 @@
+name: mg5
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - gfortran
+  - root
+  - gnuplot
+  - mplhep
+  - matplotlib
+  - uproot
+prefix: /home/zzq/miniconda3/envs/mg5
