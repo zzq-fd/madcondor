@@ -1,15 +1,26 @@
 universe              = vanilla
 
-executable            = runMadscan.sh
-arguments             = $(ProcId) $(SINTHETA) $(TANBETA) $(M35) $(M55)
+# Input tarball and output root directory.
+# Output directory is the tarball name without the .tar.gz suffix
+# (cannot be the exact same name as the tarball file, since they would collide).
+PROCESS_TAR           = bbdm_2HDMa_type1_case1_scan.tar.gz
+OUTROOT               = bbdm_2HDMa_type1_case1_scan
 
-output                = logs/output/mg.$(ClusterId).$(ProcId).out
-error                 = logs/error/mg.$(ClusterId).$(ProcId).err
-log                   = logs/log/mg.$(ClusterId).log
+executable            = runMadscan.sh
+arguments             = $(ProcId) $(SINTHETA) $(TANBETA) $(M36) $(M55) $(MCHI) $(COSBMA) $(DELTAM)
+
+# Make these macros available to the executable as environment variables.
+# On Linux, HTCondor expects a space-separated list of VAR=VALUE pairs.
+environment           = "OUTROOT=$(OUTROOT) PROCESS_TAR=$(PROCESS_TAR)"
+
+output                = $(OUTROOT)/logs/output/mg.$(ClusterId).$(ProcId).out
+error                 = $(OUTROOT)/logs/error/mg.$(ClusterId).$(ProcId).err
+log                   = $(OUTROOT)/logs/log/mg.$(ClusterId).log
 
 should_transfer_files = YES
-transfer_input_files = /afs/cern.ch/work/p/ptiwari/mg5amcnlo/MG5_aMC_v3_6_6/bbdm_2HDMa_type1_case1_scan.tar.gz,launch_card_template.dat
-transfer_output_files = results
+transfer_input_files = $(PROCESS_TAR),launch_card_template.dat
+transfer_output_files = $(OUTROOT)/results
+transfer_output_remaps = "results=$(OUTROOT)/results"
 
 on_exit_hold          = (ExitBySignal == True) || (ExitCode != 0)
 periodic_release      = (NumJobStarts < 3) && ((CurrentTime - EnteredCurrentStatus) > 600)
@@ -18,4 +29,4 @@ request_memory        = 8000
 request_cpus          = 4
 +JobFlavour           = "workday"
 
-queue SINTHETA,TANBETA, M35, M55 from joblist.txt
+queue SINTHETA,TANBETA, M36, M55, MCHI, COSBMA, DELTAM from joblist.txt

@@ -4,7 +4,7 @@ launch
 ###################################
 
 set param_card DMINPUTS 1 1.0
-set param_card FRBLOCK 3 1
+set param_card FRBLOCK 3 __SINBMA__
 set param_card FRBLOCK 2 __TANBETA__
 
 set param_card HIGGS 1 6
@@ -16,7 +16,7 @@ set param_card MASS 5 0.0
 set param_card MASS 35 __M35__
 set param_card MASS 36 __M36__
 set param_card MASS 37 __M37__
-set param_card MASS 52 1
+set param_card MASS 52 __MCHI__
 
 ###################################
 ## Internal scan (per job)

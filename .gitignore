@@ -13,6 +13,15 @@ results/
 # Generated files
 joblist.txt
 cross_section_table.txt
+joblist_*.txt
+pt52_mean_table.txt
+pt55_mean_table.txt
+
+# Generated outputs from scans/plots
+bbdm_2HDMa_*/
+comparison/
+tmp_check/
+output_scatter_plot/
 
 # Large data files
 *.tar.gz

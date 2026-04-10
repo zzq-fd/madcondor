@@ -3,14 +3,14 @@
 Extract cross-sections from MadGraph banner files and create a table.
 
 This script:
-1. Scans the results/ directory for Events_* directories
+1. Scans the <OUTPUT_FOLDER>/results/ directory for Events_* directories
 2. Parses the directory names to extract grid point parameters
 3. Reads the cross-section from the banner.txt files
 4. Creates a formatted table output file
 """
 
-import os
 import re
+import sys
 from pathlib import Path
 
 def parse_directory_name(dirname):
@@ -97,15 +97,18 @@ def find_banner_file(results_dir, event_dir):
     return None
 
 def main():
-    # Set working directory to testCondor
-    script_dir = Path(__file__).parent
-    os.chdir(script_dir)
+    if len(sys.argv) != 2:
+        prog = Path(sys.argv[0]).name
+        print(f"Usage: {prog} <OUTPUT_FOLDER>")
+        print("Example: python3 extract_cross_sections.py bbdm_2HDMa_type1_case1_scan")
+        return 2
 
-    results_dir = Path('results')
+    base_dir = Path(sys.argv[1]).expanduser()
+    results_dir = base_dir / 'results'
 
     if not results_dir.exists():
         print(f"Error: {results_dir} directory not found!")
-        return
+        return 2
 
     # Collect all data
     data = []
@@ -145,7 +148,7 @@ def main():
     ))
 
     # Write table to file
-    output_file = 'cross_section_table.txt'
+    output_file = base_dir / 'cross_section_table.txt'
 
     with open(output_file, 'w') as f:
         # Write header
@@ -171,5 +174,7 @@ def main():
     print(f"\nTable written to: {output_file}")
     print(f"Total entries: {len(data)}")
 
+    return 0
+
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
