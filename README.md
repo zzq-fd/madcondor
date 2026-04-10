@@ -207,7 +207,6 @@ conda activate mg5
 Notes:
 
 - `conda-env-mg5-history.yml` is the recommended file for new setups (minimal dependency list, easier to solve across machines).
-- `conda-env-mg5.yml` is a full exported lock-style environment from one machine and can be used if you want to reproduce that specific stack exactly.
 
 If the `mg5` environment already exists and you only need activation:
 
